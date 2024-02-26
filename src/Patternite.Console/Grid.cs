@@ -1,17 +1,16 @@
 ﻿
-public class Grid
+public class Grid<T>
 {
-    public int[,] _matrix { get; private set; }
+    private T[,] _matrix { get; set; }
 
 
-    private Grid(int rows, int cols)
+    public Grid(int rows, int cols)
     {
-        _matrix = new int[rows, cols];
+        _matrix = new T[rows, cols];
     }
 
-
-    public static Grid Create(int rows, int cols)
-        => new Grid(rows, cols);
+    public static Grid<T> Create<T>(int rows, int cols)
+        => new Grid<T>(rows, cols);
 
     public void Print()
     {
@@ -23,6 +22,12 @@ public class Grid
             }
             Console.WriteLine();
         }
+    }
+
+    public T this[int row, int col]
+    {
+        get => _matrix[row, col];
+        set => _matrix[row, col] = value;
     }
 
 }
