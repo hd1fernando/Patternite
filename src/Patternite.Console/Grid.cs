@@ -43,10 +43,15 @@ public class Grid<T>
 
     public Grid<T> Clone()
     {
-        return new Grid<T>(_matrix.GetLength(0), _matrix.GetLength(1))
+        var grid = new Grid<T>(_matrix.GetLength(0), _matrix.GetLength(1));
+        for (int i = 0; i < _matrix.GetLength(0); i++)
         {
-            _matrix = (T[,])_matrix.Clone()
-        };
+            for (int j = 0; j < _matrix.GetLength(1); j++)
+            {
+                grid[i, j] = _matrix[i, j];
+            }
+        }
+        return grid;
     }
 
 }

@@ -1,14 +1,17 @@
 ﻿
-int size = 10;
+
+using System.Runtime.CompilerServices;
+
+int size = 50;
 var grid = new Grid<Cell>(size, size);
 grid.Pupulate(() => Cell.DeadCell);
 var game = new GameOfLife(grid);
 game.GliderPopulation();
-game.Run(1000);
+game.Run(500);
 
 public sealed class GameOfLife
 {
-    private Grid<Cell> _grid;
+    private Grid<Cell> _grid { get; set; }
 
     public GameOfLife(Grid<Cell> grid)
     {
@@ -22,7 +25,7 @@ public sealed class GameOfLife
         _grid[3, 3] = Cell.LiveCell;
         _grid[3, 4] = Cell.LiveCell;
         _grid[4, 2] = Cell.LiveCell;
-        _grid[2, 3] = Cell.LiveCell;
+        _grid[4, 3] = Cell.LiveCell;
     }
 
     private int NumsOfLivedNeighbors(int row, int col)
@@ -41,6 +44,12 @@ public sealed class GameOfLife
                 }
             }
         }
+
+        if (_grid[row, col] == Cell.LiveCell)
+        {
+            result--;
+        }
+
         return result;
     }
 
@@ -48,6 +57,8 @@ public sealed class GameOfLife
     public void Run(int msSleep)
     {
         var tempGrid = _grid.Clone();
+        _grid.Print();
+
         while (true)
         {
             ClearScreen();
@@ -102,7 +113,15 @@ public sealed class Cell
     public static bool operator ==(Cell cell, Cell other) => cell.Value == other.Value;
     public static bool operator !=(Cell cell, Cell other) => cell.Value != other.Value;
 
-    public override string ToString() => Value;
+    public override string ToString() => Value!;
 
     public Cell Clone() => new Cell(Value);
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null || obj.GetType() != GetType())
+            return false;
+
+        return (obj as Cell)?.Value == Value;
+    }
 }
